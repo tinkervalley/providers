@@ -49,6 +49,7 @@ import { ridooMoviesScraper } from './sources/ridomovies';
 import { smashyStreamScraper } from './sources/smashystream';
 import { soaperTvScraper } from './sources/soapertv';
 import { vidSrcToScraper } from './sources/vidsrcto';
+import { vidsrcWaffleHackerScraper } from './sources/wafflevidsrc';
 import { warezcdnScraper } from './sources/warezcdn';
 
 export function gatherAllSources(): Array<Sourcerer> {
@@ -66,6 +67,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     smashyStreamScraper,
     ridooMoviesScraper,
     vidSrcToScraper,
+    vidsrcWaffleHackerScraper,
     nepuScraper,
     goojaraScraper,
     hdRezkaScraper,
