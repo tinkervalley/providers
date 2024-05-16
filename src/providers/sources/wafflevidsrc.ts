@@ -37,6 +37,7 @@ export const vidsrcWaffleHackerScraper = makeSourcerer({
   id: 'vidsrc-wafflehacker',
   name: 'Vidsrc',
   rank: 135,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,

@@ -6,7 +6,7 @@ import { NotFoundError } from '@/utils/errors';
 import { getCaptions } from './captions';
 import { Season } from './types';
 
-const insertUnitBase = 'https://api.insertunit.ws/';
+const insertUnitBase = 'https://insertunit.wafflehacker.io';
 
 export const insertunitScraper = makeSourcerer({
   id: 'insertunit',
@@ -15,7 +15,7 @@ export const insertunitScraper = makeSourcerer({
   rank: 60,
   flags: [flags.CORS_ALLOWED],
   async scrapeShow(ctx) {
-    const playerData = await ctx.fetcher<string>(`/embed/imdb/${ctx.media.imdbId}`, {
+    const playerData = await ctx.fetcher<string>(`index.php?imdb=${ctx.media.imdbId}`, {
       baseUrl: insertUnitBase,
     });
     ctx.progress(30);
