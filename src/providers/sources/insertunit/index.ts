@@ -62,7 +62,7 @@ export const insertunitScraper = makeSourcerer({
     };
   },
   async scrapeMovie(ctx) {
-    const playerData = await ctx.fetcher<string>(`/embed/imdb/${ctx.media.imdbId}`, {
+    const playerData = await ctx.fetcher<string>(`index.php?imdb=${ctx.media.imdbId}`, {
       baseUrl: insertUnitBase,
     });
     ctx.progress(35);
