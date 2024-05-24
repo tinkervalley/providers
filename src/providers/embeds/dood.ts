@@ -1,3 +1,4 @@
+import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 
 export const doodScraper = makeEmbed({
@@ -31,7 +32,7 @@ export const doodScraper = makeEmbed({
         {
           id: 'primary',
           type: 'file',
-          flags: [],
+          flags: [flags.CORS_ALLOWED],
           captions: [],
           qualities: {
             unknown: {
