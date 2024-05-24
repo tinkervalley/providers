@@ -20,10 +20,11 @@ export const insertunitScraper = makeSourcerer({
     });
     ctx.progress(30);
 
-    const seasonDataJSONregex = /seasons:\s*(\[.*?\])/;
+    const seasonDataJSONregex = /seasons:\s*(\[\{[\s\S]*?\}\])/;
     const seasonDataMatch = seasonDataJSONregex.exec(playerData);
 
     if (!seasonDataMatch || !seasonDataMatch[1]) {
+      console.error('No match for season data');
       throw new NotFoundError('No result found');
     }
 
@@ -33,6 +34,7 @@ export const insertunitScraper = makeSourcerer({
     try {
       seasonTable = JSON.parse(seasonDataMatch[1]) as Season[];
     } catch (error) {
+      console.error('Error parsing season data:', error);
       throw new NotFoundError('Error parsing season data');
     }
 
@@ -41,6 +43,7 @@ export const insertunitScraper = makeSourcerer({
     );
 
     if (!currentSeason) {
+      console.error('Season not found or blocked');
       throw new NotFoundError('Season not found or blocked');
     }
 
@@ -49,6 +52,7 @@ export const insertunitScraper = makeSourcerer({
     );
 
     if (!currentEpisode?.hls) {
+      console.error('Episode not found or no HLS stream available');
       throw new NotFoundError('Episode not found or no HLS stream available');
     }
 
