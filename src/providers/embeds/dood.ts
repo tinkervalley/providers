@@ -11,7 +11,18 @@ export const doodScraper = makeEmbed({
       url = request.finalUrl;
     }
 
-    const id = url.split('/d/')[1] || url.split('/e/')[1];
+    // Fetch the doodData from the given URL
+    const doodData = await ctx.proxiedFetcher<string>(url, {
+      method: 'GET',
+    });
+
+    // Match the iframe src to extract the id
+    const iframeMatch = doodData.match(/<iframe[^>]+src="\/e\/([^"]+)"[^>]*><\/iframe>/);
+    if (!iframeMatch) {
+      throw new Error('Unable to find iframe src in the page');
+    }
+
+    const id = iframeMatch[1];
 
     const downloadURL = `https://dood.wafflehacker.io/scrape/${id}`;
 
