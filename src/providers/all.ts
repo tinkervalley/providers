@@ -29,7 +29,7 @@ import { closeLoadScraper } from './embeds/closeload';
 import { fileMoonScraper } from './embeds/filemoon';
 import { fileMoonMp4Scraper } from './embeds/filemoon/mp4';
 import { hydraxScraper } from './embeds/hydrax';
-import { deltaScraper } from './embeds/nsbx/delta';
+import { alphaScraper, deltaScraper } from './embeds/nsbx';
 import { playm4uNMScraper } from './embeds/playm4u/nm';
 import { ridooScraper } from './embeds/ridoo';
 import { smashyStreamOScraper } from './embeds/smashystream/opstream';
@@ -104,6 +104,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     fileMoonScraper,
     fileMoonMp4Scraper,
     deltaScraper,
+    alphaScraper,
     vidplayScraper,
     wootlyScraper,
     doodScraper,
