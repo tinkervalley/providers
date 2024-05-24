@@ -20,29 +20,40 @@ export const insertunitScraper = makeSourcerer({
     });
     ctx.progress(30);
 
-    const seasonDataJSONregex = /seasons:(.*)/;
-    const seasonData = seasonDataJSONregex.exec(playerData);
+    const seasonDataJSONregex = /seasons:\s*(\[.*?\])/;
+    const seasonDataMatch = seasonDataJSONregex.exec(playerData);
 
-    if (seasonData === null || seasonData[1] === null) {
+    if (!seasonDataMatch || !seasonDataMatch[1]) {
       throw new NotFoundError('No result found');
     }
+
     ctx.progress(60);
 
-    const seasonTable: Season[] = JSON.parse(seasonData[1]) as Season[];
+    let seasonTable: Season[];
+    try {
+      seasonTable = JSON.parse(seasonDataMatch[1]) as Season[];
+    } catch (error) {
+      throw new NotFoundError('Error parsing season data');
+    }
 
     const currentSeason = seasonTable.find(
       (seasonElement) => seasonElement.season === ctx.media.season.number && !seasonElement.blocked,
     );
 
-    const currentEpisode = currentSeason?.episodes.find((episodeElement) =>
-      episodeElement.episode.includes(ctx.media.episode.number.toString()),
+    if (!currentSeason) {
+      throw new NotFoundError('Season not found or blocked');
+    }
+
+    const currentEpisode = currentSeason.episodes.find(
+      (episodeElement) => episodeElement.episode === ctx.media.episode.number.toString(),
     );
 
-    if (!currentEpisode?.hls) throw new NotFoundError('No result found');
+    if (!currentEpisode?.hls) {
+      throw new NotFoundError('Episode not found or no HLS stream available');
+    }
 
     let captions: Caption[] = [];
-
-    if (currentEpisode.cc != null) {
+    if (currentEpisode.cc) {
       captions = await getCaptions(currentEpisode.cc);
     }
 
