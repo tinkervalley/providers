@@ -1,7 +1,14 @@
 import { flags } from '@/entrypoint/utils/targets';
-import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
+import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
+
+export const baseUrl = 'https://nsbx.wafflehacker.io';
+
+export const headers = {
+  Origin: 'https://extension.works.again.with.nsbx',
+  Referer: 'https://extension.works.again.with.nsbx',
+};
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const query = {
@@ -19,14 +26,23 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     query.episode = ctx.media.episode.number.toString();
   }
 
-  const result = await ctx.fetcher(
-    `https://nsbx.wafflehacker.io/search.php?query=${encodeURIComponent(JSON.stringify(query))}`,
-  );
+  const res = await ctx.fetcher(`${baseUrl}/status.php`, {
+    headers,
+  });
 
-  if (result.embeds.length === 0) throw new NotFoundError('No watchable item found');
+  if (res.providers?.length === 0) {
+    throw new NotFoundError('No providers available');
+  }
+
+  const embeds = res.providers.map((provider: string) => {
+    return {
+      embedId: provider,
+      url: JSON.stringify(query),
+    };
+  });
 
   return {
-    embeds: result.embeds as SourcererEmbed[],
+    embeds,
   };
 }
 
