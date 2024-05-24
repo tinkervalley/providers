@@ -1,7 +1,5 @@
 import { makeEmbed } from '@/providers/base';
 
-const baseUrl = 'https://d000d.com';
-
 export const doodScraper = makeEmbed({
   id: 'dood',
   name: 'dood',
@@ -15,12 +13,6 @@ export const doodScraper = makeEmbed({
 
     const id = url.split('/d/')[1] || url.split('/e/')[1];
 
-    const doodData = await ctx.proxiedFetcher<string>(`/e/${id}`, {
-      method: 'GET',
-      baseUrl,
-    });
-
-    const thumbnailTrack = doodData.match(/thumbnails:\s\{\s*vtt:\s'([^']*)'/);
     const downloadURL = `https://dood.wafflehacker.io/scrape/${id}`;
 
     return {
@@ -36,17 +28,6 @@ export const doodScraper = makeEmbed({
               url: downloadURL,
             },
           },
-          headers: {
-            Referer: baseUrl,
-          },
-          ...(thumbnailTrack
-            ? {
-                thumbnailTrack: {
-                  type: 'vtt',
-                  url: `https:${thumbnailTrack[1]}`,
-                },
-              }
-            : {}),
         },
       ],
     };
