@@ -1,5 +1,6 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
+import { NotFoundError } from '@/utils/errors';
 
 export const doodScraper = makeEmbed({
   id: 'dood',
@@ -12,18 +13,14 @@ export const doodScraper = makeEmbed({
       url = request.finalUrl;
     }
 
-    // Fetch the doodData from the given URL
-    const doodData = await ctx.proxiedFetcher<string>(url, {
-      method: 'GET',
-    });
+    const vidScrapeURL = `https://dood.wafflehacker.io/scrape?url=${encodeURIComponent(url)}`;
+    const vidScrape = await ctx.fetcher(vidScrapeURL);
 
-    // Match the iframe src to extract the id
-    const iframeMatch = doodData.match(/<iframe[^>]+src="\/e\/([^"]+)"[^>]*><\/iframe>/);
-    if (!iframeMatch) {
-      throw new Error('Unable to find iframe src in the page');
+    if (vidScrape.videoUrl?.length === 0) {
+      throw new NotFoundError('No Video Found');
     }
 
-    const downloadURL = `https://dood.wafflehacker.io/scrape?url=${encodeURIComponent(url)}`;
+    const downloadURL = vidScrape.videoUrl;
 
     return {
       stream: [
