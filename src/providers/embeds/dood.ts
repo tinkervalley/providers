@@ -16,11 +16,15 @@ export const doodScraper = makeEmbed({
     const vidScrapeURL = `https://dood.wafflehacker.io/scrape?url=${encodeURIComponent(url)}`;
     const vidScrape = await ctx.fetcher(vidScrapeURL);
 
+    ctx.progress(50);
+
     if (vidScrape.videoUrl?.length === 0) {
       throw new NotFoundError('No Video Found');
     }
 
     const downloadURL = `https://dood.wafflehacker.io/view?url=${encodeURIComponent(vidScrape.videoUrl)}`;
+
+    ctx.progress(100);
 
     return {
       stream: [
