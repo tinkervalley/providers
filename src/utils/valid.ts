@@ -1,10 +1,12 @@
+import { doodScraper } from '@/providers/embeds/dood';
+import { alphaScraper } from '@/providers/embeds/nsbx';
+import { upstreamScraper } from '@/providers/embeds/upstream';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
-import { vidsrcWaffleHackerScraper } from '@/providers/sources/wafflevidsrc';
 import { Stream } from '@/providers/streams';
 import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
 import { ProviderRunnerOptions } from '@/runners/runner';
 
-const SKIP_VALIDATION_CHECK_IDS = [warezcdnembedMp4Scraper.id, vidsrcWaffleHackerScraper.id];
+const SKIP_VALIDATION_CHECK_IDS = [warezcdnembedMp4Scraper.id, upstreamScraper.id, doodScraper.id, alphaScraper.id];
 
 export function isValidStream(stream: Stream | undefined): boolean {
   if (!stream) return false;
