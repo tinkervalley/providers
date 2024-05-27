@@ -23,9 +23,7 @@ export const doodScraper = makeEmbed({
       throw new Error('Unable to find iframe src in the page');
     }
 
-    const id = iframeMatch[1];
-
-    const downloadURL = `https://dood.wafflehacker.io/scrape/${id}`;
+    const downloadURL = `https://dood.wafflehacker.io/scrape?url=${encodeURIComponent(url)}`;
 
     return {
       stream: [
