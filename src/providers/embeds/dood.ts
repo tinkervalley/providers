@@ -20,7 +20,7 @@ export const doodScraper = makeEmbed({
       throw new NotFoundError('No Video Found');
     }
 
-    const downloadURL = vidScrape.videoUrl;
+    const downloadURL = `https://dood.wafflehacker.io/view?url=${encodeURIComponent(vidScrape.videoUrl)}`;
 
     return {
       stream: [
