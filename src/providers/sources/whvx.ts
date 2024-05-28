@@ -3,11 +3,11 @@ import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-export const baseUrl = 'https://nsbx.wafflehacker.io';
+export const baseUrl = 'https://api.whvx.net';
 
 export const headers = {
-  Origin: 'https://extension.works.again.with.nsbx',
-  Referer: 'https://extension.works.again.with.nsbx',
+  Origin: 'https://whvx.net',
+  Referer: 'https://whvx.net',
 };
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
@@ -26,7 +26,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     query.episode = ctx.media.episode.number.toString();
   }
 
-  const res = await ctx.fetcher(`${baseUrl}/status.php`, {
+  const res = await ctx.fetcher(`${baseUrl}/status`, {
     headers,
   });
 
@@ -46,9 +46,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   };
 }
 
-export const nsbxScraper = makeSourcerer({
-  id: 'nsbx',
-  name: 'NSBX',
+export const whvxScraper = makeSourcerer({
+  id: 'whvx',
+  name: 'WHVX',
   rank: 150,
   flags: [flags.CORS_ALLOWED],
   disabled: false,

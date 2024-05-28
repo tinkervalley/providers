@@ -1,5 +1,5 @@
 import { doodScraper } from '@/providers/embeds/dood';
-import { alphaScraper } from '@/providers/embeds/nsbx';
+import { alphaScraper } from '@/providers/embeds/whvx';
 import { upstreamScraper } from '@/providers/embeds/upstream';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
 import { Stream } from '@/providers/streams';

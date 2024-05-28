@@ -1,14 +1,14 @@
 import { EmbedOutput, makeEmbed } from '@/providers/base';
-import { baseUrl, headers } from '@/providers/sources/nsbx';
+import { baseUrl, headers } from '@/providers/sources/whvx';
 import { NotFoundError } from '@/utils/errors';
 
 const providers = [
   {
-    id: 'delta',
+    id: 'nova',
     rank: 699,
   },
   {
-    id: 'alpha',
+    id: 'astra',
     rank: 695,
   },
 ];
@@ -21,7 +21,7 @@ function embed(provider: { id: string; rank: number }) {
     disabled: false,
     async scrape(ctx) {
       const search = await ctx.fetcher.full(
-        `${baseUrl}/search.php?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}`,
+        `${baseUrl}/search?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}`,
         { headers },
       );
 
@@ -34,7 +34,7 @@ function embed(provider: { id: string; rank: number }) {
       ctx.progress(50);
 
       const result = await ctx.fetcher(
-        `${baseUrl}/provider.php?resourceId=${encodeURIComponent(search.body.url)}&provider=${provider.id}`,
+        `${baseUrl}/source?resourceId=${encodeURIComponent(search.body.url)}&provider=${provider.id}`,
         {
           headers,
         },
@@ -47,4 +47,4 @@ function embed(provider: { id: string; rank: number }) {
   });
 }
 
-export const [deltaScraper, alphaScraper] = providers.map(embed);
+export const [novaScraper, astraScraper] = providers.map(embed);
