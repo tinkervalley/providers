@@ -18,7 +18,7 @@ export const upstreamScraper = makeEmbed({
     }
 
     const videoID = idMatch[1];
-    const vidScrapeURL = `http://upstream.wafflehacker.io/scrape?id=${encodeURIComponent(videoID)}`;
+    const vidScrapeURL = `https://upstream.wafflehacker.io/scrape?id=${encodeURIComponent(videoID)}`;
     ctx.progress(50);
     const vidScrape = await ctx.fetcher(vidScrapeURL);
     ctx.progress(100);
