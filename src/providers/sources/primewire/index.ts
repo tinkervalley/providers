@@ -63,6 +63,9 @@ async function getStreams(title: string) {
         case 'vtube.to':
           embedId = 'vtube';
           break;
+        case 'vidmoly.me':
+          embedId = 'vidmoly';
+          break;
         default:
           embedId = null;
       }

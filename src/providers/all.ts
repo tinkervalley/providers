@@ -36,6 +36,7 @@ import { smashyStreamFScraper } from './embeds/smashystream/video1';
 import { streamtapeScraper } from './embeds/streamtape';
 import { streamvidScraper } from './embeds/streamvid';
 import { vidCloudScraper } from './embeds/vidcloud';
+import { vidMolyScraper } from './embeds/vidmoly';
 import { vidplayScraper } from './embeds/vidplay';
 import { voeScraper } from './embeds/voe';
 import { warezcdnembedHlsScraper } from './embeds/warezcdn/hls';
@@ -119,5 +120,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     bflixScraper,
     playm4uNMScraper,
     hydraxScraper,
+    vidMolyScraper,
   ];
 }
