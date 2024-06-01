@@ -1,33 +1,28 @@
-import { flags } from '@/entrypoint/utils/targets';
-import { makeEmbed } from '@/providers/base';
-
-const linkRegex = /file:"(https:\/\/[^"]+)"/s;
+import { EmbedOutput, makeEmbed } from '@/providers/base';
+import { NotFoundError } from '@/utils/errors';
 
 export const vidMolyScraper = makeEmbed({
   id: 'vidmoly',
   name: 'Vidmoly',
   rank: 194,
   async scrape(ctx) {
-    // Example url: https://vidmoly.me/w/w1lfebo8xiyz
-    const streamRes = await ctx.proxiedFetcher<string>(ctx.url);
-    const link = streamRes.match(linkRegex);
-    if (!link) throw new Error('Failed to extract link');
+    let url = ctx.url;
+    if (ctx.url.includes('primewire')) {
+      const request = await ctx.proxiedFetcher.full(ctx.url);
+      url = request.finalUrl;
+    }
 
-    const encodedLink = encodeURIComponent(link[1]);
-    const referer = 'https://vidmoly.me/w/1';
-    const encodedReferer = encodeURIComponent(referer);
-    const proxiedURL = `https://m3u8.justchill.workers.dev/?url=${encodedLink}&referer=${encodedReferer}`;
+    // Match the URL pattern for vidmoly.to or vidmoly.me/w/[videoID]
+    const idMatch = url.match(/https:\/\/vidmoly\.(to|me)\/w\/(.+)$/);
+    if (!idMatch) {
+      throw new NotFoundError('Invalid URL format');
+    }
 
-    return {
-      stream: [
-        {
-          type: 'hls',
-          id: 'primary',
-          playlist: proxiedURL,
-          flags: [flags.CORS_ALLOWED],
-          captions: [],
-        },
-      ],
-    };
+    const videoID = idMatch[2];
+    const vidScrapeURL = `https://vidmoly.wafflehacker.io/scrape?id=${encodeURIComponent(videoID)}`;
+    ctx.progress(50);
+    const vidScrape = await ctx.fetcher(vidScrapeURL);
+    ctx.progress(100);
+    return vidScrape as EmbedOutput;
   },
 });
