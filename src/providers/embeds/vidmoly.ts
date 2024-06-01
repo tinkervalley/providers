@@ -10,8 +10,6 @@ export const vidMolyScraper = makeEmbed({
     if (ctx.url.includes('primewire')) {
       const request = await ctx.proxiedFetcher.full(ctx.url);
       url = request.finalUrl;
-      /* eslint-disable no-console */
-      console.log(url);
     }
 
     // Match the URL pattern for vidmoly.to or vidmoly.me/w/[videoID]
