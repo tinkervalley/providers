@@ -1,12 +1,20 @@
 import { doodScraper } from '@/providers/embeds/dood';
 import { upstreamScraper } from '@/providers/embeds/upstream';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
-import { astraScraper } from '@/providers/embeds/whvx';
+import { astraScraper, novaScraper } from '@/providers/embeds/whvx';
+import { vidSrcToScraper } from '@/providers/sources/vidsrcto';
 import { Stream } from '@/providers/streams';
 import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
 import { ProviderRunnerOptions } from '@/runners/runner';
 
-const SKIP_VALIDATION_CHECK_IDS = [warezcdnembedMp4Scraper.id, upstreamScraper.id, doodScraper.id, astraScraper.id];
+const SKIP_VALIDATION_CHECK_IDS = [
+  warezcdnembedMp4Scraper.id,
+  upstreamScraper.id,
+  doodScraper.id,
+  astraScraper.id,
+  novaScraper.id,
+  vidSrcToScraper.id,
+];
 
 export function isValidStream(stream: Stream | undefined): boolean {
   if (!stream) return false;
