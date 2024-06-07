@@ -36,7 +36,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   }
 
   const vidplayStreamURL = vidplaySource.data.stream;
-  const proxiedStreamURL = `https://m3u8.justchill.workers.dev/?url=${encodeURIComponent(vidplayStreamURL)}&referer=https://vid30c.site/&origin=https://vid30c.site`;
+  const proxiedStreamURL = `https://m3u8.justchill.workers.dev/?url=${encodeURIComponent(vidplayStreamURL)}`;
   const subtitles = vidplaySource.data.subtitle;
 
   const captions: Caption[] =
