@@ -3,12 +3,7 @@ import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-export const baseUrl = 'https://api.whvx.net';
-
-export const headers = {
-  Origin: 'https://whvx.net',
-  Referer: 'https://whvx.net',
-};
+export const baseUrl = 'https://nsbx.vidbinge.com';
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const query = {
@@ -26,9 +21,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     query.episode = ctx.media.episode.number.toString();
   }
 
-  const res = await ctx.fetcher(`${baseUrl}/status`, {
-    headers,
-  });
+  const res = await ctx.fetcher(`${baseUrl}/status`);
 
   if (res.providers?.length === 0) {
     throw new NotFoundError('No providers available');
@@ -46,9 +39,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   };
 }
 
-export const whvxScraper = makeSourcerer({
-  id: 'whvx',
-  name: 'WHVX',
+export const nsbxScraper = makeSourcerer({
+  id: 'nsbx',
+  name: 'NSBX',
   rank: 150,
   flags: [flags.CORS_ALLOWED],
   disabled: true,

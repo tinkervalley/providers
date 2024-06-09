@@ -17,11 +17,11 @@ import { goMoviesScraper } from '@/providers/sources/gomovies/index';
 import { insertunitScraper } from '@/providers/sources/insertunit';
 import { kissAsianScraper } from '@/providers/sources/kissasian/index';
 import { lookmovieScraper } from '@/providers/sources/lookmovie';
+import { nsbxScraper } from '@/providers/sources/nsbx';
 import { remotestreamScraper } from '@/providers/sources/remotestream';
 import { showboxScraper } from '@/providers/sources/showbox/index';
 import { tugaflixScraper } from '@/providers/sources/tugaflix';
 import { vidsrcScraper } from '@/providers/sources/vidsrc/index';
-import { whvxScraper } from '@/providers/sources/whvx';
 import { zoechipScraper } from '@/providers/sources/zoechip';
 
 import { bflixScraper } from './embeds/bflix';
@@ -29,11 +29,12 @@ import { closeLoadScraper } from './embeds/closeload';
 import { fileMoonScraper } from './embeds/filemoon';
 import { fileMoonMp4Scraper } from './embeds/filemoon/mp4';
 import { hydraxScraper } from './embeds/hydrax';
+import { alphaScraper, deltaScraper } from './embeds/nsbx';
 import { playm4uNMScraper } from './embeds/playm4u/nm';
 import { ridooScraper } from './embeds/ridoo';
 import { smashyStreamOScraper } from './embeds/smashystream/opstream';
 import { smashyStreamFScraper } from './embeds/smashystream/video1';
-import { streamtapeScraper } from './embeds/streamtape';
+import { streamTapeScraper } from './embeds/streamtape';
 import { streamvidScraper } from './embeds/streamvid';
 import { vidCloudScraper } from './embeds/vidcloud';
 import { vidMolyScraper } from './embeds/vidmoly';
@@ -41,7 +42,6 @@ import { vidplayScraper } from './embeds/vidplay';
 import { voeScraper } from './embeds/voe';
 import { warezcdnembedHlsScraper } from './embeds/warezcdn/hls';
 import { warezcdnembedMp4Scraper } from './embeds/warezcdn/mp4';
-import { astraScraper, novaScraper } from './embeds/whvx';
 import { wootlyScraper } from './embeds/wootly';
 import { goojaraScraper } from './sources/goojara';
 import { hdRezkaScraper } from './sources/hdrezka';
@@ -67,7 +67,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     zoechipScraper,
     vidsrcScraper,
     lookmovieScraper,
-    whvxScraper,
+    nsbxScraper,
     smashyStreamScraper,
     ridooMoviesScraper,
     vidSrcToScraper,
@@ -104,14 +104,14 @@ export function gatherAllEmbeds(): Array<Embed> {
     closeLoadScraper,
     fileMoonScraper,
     fileMoonMp4Scraper,
-    novaScraper,
-    astraScraper,
+    deltaScraper,
+    alphaScraper,
     vidplayScraper,
     wootlyScraper,
     doodScraper,
     streamvidScraper,
     voeScraper,
-    streamtapeScraper,
+    streamTapeScraper,
     droploadScraper,
     filelionsScraper,
     vTubeScraper,

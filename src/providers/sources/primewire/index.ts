@@ -63,6 +63,9 @@ async function getStreams(title: string) {
         case 'vidmoly.me':
           embedId = 'vidmoly';
           break;
+        case 'streamtape.com':
+          embedId = 'streamtape';
+          break;
         default:
           embedId = null;
       }

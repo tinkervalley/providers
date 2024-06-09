@@ -1,7 +1,7 @@
 import { doodScraper } from '@/providers/embeds/dood';
+import { alphaScraper, deltaScraper } from '@/providers/embeds/nsbx';
 import { upstreamScraper } from '@/providers/embeds/upstream';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
-import { astraScraper, novaScraper } from '@/providers/embeds/whvx';
 import { vidSrcToScraper } from '@/providers/sources/vidsrcto';
 import { Stream } from '@/providers/streams';
 import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
@@ -11,8 +11,8 @@ const SKIP_VALIDATION_CHECK_IDS = [
   warezcdnembedMp4Scraper.id,
   upstreamScraper.id,
   doodScraper.id,
-  astraScraper.id,
-  novaScraper.id,
+  alphaScraper.id,
+  deltaScraper.id,
   vidSrcToScraper.id,
 ];
 
