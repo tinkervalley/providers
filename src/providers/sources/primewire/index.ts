@@ -48,14 +48,8 @@ async function getStreams(title: string) {
         case 'upstream.to':
           embedId = 'upstream';
           break;
-        case 'streamvid.net':
-          embedId = 'streamvid';
-          break;
         case 'dropload.io':
           embedId = 'dropload';
-          break;
-        case 'filelions.to':
-          embedId = 'filelions';
           break;
         case 'vtube.to':
           embedId = 'vtube';
