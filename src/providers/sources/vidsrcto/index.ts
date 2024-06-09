@@ -29,7 +29,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
       },
     },
   );
-
+  ctx.progress(50);
   const vidplaySource = apiRes.sources.find((source) => source.name === 'Vidplay');
   if (!vidplaySource || !vidplaySource.data.stream) {
     throw new NotFoundError('No stream found.');
@@ -38,7 +38,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   const vidplayStreamURL = vidplaySource.data.stream;
   const proxiedStreamURL = `https://m3u8.justchill.workers.dev/?url=${encodeURIComponent(vidplayStreamURL)}`;
   const subtitles = vidplaySource.data.subtitle;
-
+  ctx.progress(75);
   const captions: Caption[] =
     subtitles?.map((sub) => {
       const language = labelToLanguageCode(sub.lang) || 'und'; // Provide a default value if null
@@ -52,7 +52,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
         hasCorsRestrictions: false,
       };
     }) || [];
-
+  ctx.progress(100);
   return {
     embeds: [],
     stream: [
