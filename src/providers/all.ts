@@ -1,5 +1,4 @@
 import { Embed, Sourcerer } from '@/providers/base';
-import { doodScraper } from '@/providers/embeds/dood';
 import { droploadScraper } from '@/providers/embeds/dropload';
 import { febboxHlsScraper } from '@/providers/embeds/febbox/hls';
 import { febboxMp4Scraper } from '@/providers/embeds/febbox/mp4';
@@ -31,9 +30,6 @@ import { fileMoonMp4Scraper } from './embeds/filemoon/mp4';
 import { hydraxScraper } from './embeds/hydrax';
 import { alphaScraper, deltaScraper } from './embeds/nsbx';
 import { playm4uNMScraper } from './embeds/playm4u/nm';
-import { ridooScraper } from './embeds/ridoo';
-import { smashyStreamOScraper } from './embeds/smashystream/opstream';
-import { smashyStreamFScraper } from './embeds/smashystream/video1';
 import { streamTapeScraper } from './embeds/streamtape';
 import { streamvidScraper } from './embeds/streamvid';
 import { vidCloudScraper } from './embeds/vidcloud';
@@ -49,8 +45,6 @@ import { m4uScraper } from './sources/m4ufree';
 import { nepuScraper } from './sources/nepu';
 import { nitesScraper } from './sources/nites';
 import { primewireScraper } from './sources/primewire';
-import { ridooMoviesScraper } from './sources/ridomovies';
-import { smashyStreamScraper } from './sources/smashystream';
 import { soaperTvScraper } from './sources/soapertv';
 import { vidSrcToScraper } from './sources/vidsrcto';
 import { vidsrcWaffleHackerScraper } from './sources/wafflevidsrc';
@@ -68,8 +62,6 @@ export function gatherAllSources(): Array<Sourcerer> {
     vidsrcScraper,
     lookmovieScraper,
     nsbxScraper,
-    smashyStreamScraper,
-    ridooMoviesScraper,
     vidSrcToScraper,
     vidsrcWaffleHackerScraper,
     nepuScraper,
@@ -98,9 +90,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     mixdropScraper,
     vidsrcembedScraper,
     streambucketScraper,
-    smashyStreamFScraper,
-    smashyStreamOScraper,
-    ridooScraper,
     closeLoadScraper,
     fileMoonScraper,
     fileMoonMp4Scraper,
@@ -108,7 +97,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     alphaScraper,
     vidplayScraper,
     wootlyScraper,
-    doodScraper,
     streamvidScraper,
     voeScraper,
     streamTapeScraper,
