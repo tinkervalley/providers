@@ -4,7 +4,7 @@ import { NotFoundError } from '@/utils/errors';
 export const streamTapeScraper = makeEmbed({
   id: 'streamtape',
   name: 'StreamTape',
-  rank: 160,
+  rank: 199,
   async scrape(ctx) {
     let url = ctx.url;
     if (ctx.url.includes('primewire')) {

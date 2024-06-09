@@ -4,7 +4,7 @@ import { NotFoundError } from '@/utils/errors';
 export const upstreamScraper = makeEmbed({
   id: 'upstream',
   name: 'UpStream',
-  rank: 199,
+  rank: 160,
   async scrape(ctx) {
     let url = ctx.url;
     if (ctx.url.includes('primewire')) {
