@@ -1,5 +1,6 @@
 import { doodScraper } from '@/providers/embeds/dood';
 import { alphaScraper, deltaScraper } from '@/providers/embeds/nsbx';
+import { streamTapeScraper } from '@/providers/embeds/streamtape';
 import { upstreamScraper } from '@/providers/embeds/upstream';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
 import { vidSrcToScraper } from '@/providers/sources/vidsrcto';
@@ -14,6 +15,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   alphaScraper.id,
   deltaScraper.id,
   vidSrcToScraper.id,
+  streamTapeScraper.id,
 ];
 
 export function isValidStream(stream: Stream | undefined): boolean {
