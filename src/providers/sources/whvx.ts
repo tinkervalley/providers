@@ -8,8 +8,6 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   const query = {
     title: ctx.media.title,
     releaseYear: ctx.media.releaseYear,
-    tmdbId: ctx.media.tmdbId,
-    imdbId: ctx.media.imdbId,
     type: ctx.media.type,
     season: '',
     episode: '',
@@ -37,9 +35,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const whvxScraper = makeSourcerer({
   id: 'whvx',
   name: 'WHVX',
-  rank: 160,
+  rank: 145,
   flags: [flags.CORS_ALLOWED],
-  disabled: false,
+  disabled: true,
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
 });
