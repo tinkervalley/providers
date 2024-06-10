@@ -1,6 +1,5 @@
 import { EmbedOutput, makeEmbed } from '@/providers/base';
 import { baseUrl } from '@/providers/sources/whvx';
-import { NotFoundError } from '@/utils/errors';
 
 export const novaScraper = makeEmbed({
   id: 'nova',
@@ -9,19 +8,9 @@ export const novaScraper = makeEmbed({
   disabled: false,
   async scrape(ctx) {
     const search = await ctx.fetcher(`${baseUrl}/search?query=${encodeURIComponent(ctx.url)}`);
-
-    if (search.statusCode === 429) {
-      throw new Error('Rate limited');
-    } else if (search.statusCode !== 200) {
-      throw new NotFoundError('Failed to search');
-    }
-
     ctx.progress(50);
-
     const result = await ctx.fetcher(`${baseUrl}/source?resourceId=${encodeURIComponent(search.url)}`);
-
     ctx.progress(100);
-
     return result as EmbedOutput;
   },
 });
