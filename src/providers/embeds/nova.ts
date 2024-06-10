@@ -8,7 +8,7 @@ export const novaScraper = makeEmbed({
   rank: 270,
   disabled: false,
   async scrape(ctx) {
-    const search = await ctx.proxiedFetcher.full(`${baseUrl}/search?query=${encodeURIComponent(ctx.url)}`);
+    const search = await ctx.fetcher(`${baseUrl}/search?query=${encodeURIComponent(ctx.url)}`);
 
     if (search.statusCode === 429) {
       throw new Error('Rate limited');
@@ -18,7 +18,7 @@ export const novaScraper = makeEmbed({
 
     ctx.progress(50);
 
-    const result = await ctx.proxiedFetcher(`${baseUrl}/source?resourceId=${encodeURIComponent(search.body.url)}`);
+    const result = await ctx.fetcher(`${baseUrl}/source?resourceId=${encodeURIComponent(search.body.url)}`);
 
     ctx.progress(100);
 
