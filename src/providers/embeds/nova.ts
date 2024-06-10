@@ -6,7 +6,7 @@ export const novaScraper = makeEmbed({
   rank: 270,
   disabled: false,
   async scrape(ctx) {
-    const url = `https://cta.wafflehacker.io/provider?resourceId=${encodeURIComponent(ctx.url)}`;
+    const url = `https://cta.wafflehacker.io/source?resourceId=${encodeURIComponent(ctx.url)}`;
     const result = await ctx.fetcher(url);
 
     return result as EmbedOutput;
