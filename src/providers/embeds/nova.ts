@@ -18,7 +18,7 @@ export const novaScraper = makeEmbed({
 
     ctx.progress(50);
 
-    const result = await ctx.fetcher(`${baseUrl}/source?resourceId=${encodeURIComponent(search.body.url)}`);
+    const result = await ctx.fetcher(`${baseUrl}/source?resourceId=${encodeURIComponent(search.url)}`);
 
     ctx.progress(100);
 
