@@ -1,5 +1,5 @@
 import { flags } from '@/entrypoint/utils/targets';
-import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
+import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
@@ -7,6 +7,8 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   const query = {
     title: ctx.media.title,
     releaseYear: ctx.media.releaseYear,
+    tmdbId: ctx.media.tmdbId,
+    imdbId: ctx.media.imdbId,
     type: ctx.media.type,
     season: '',
     episode: '',
@@ -17,14 +19,17 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     query.episode = ctx.media.episode.number.toString();
   }
 
-  const result = await ctx.fetcher(
-    `https://cta.wafflehacker.io/search?query=${encodeURIComponent(JSON.stringify(query))}`,
-  );
+  const providers = ['nova', null];
 
-  if (result.embeds.length === 0) throw new NotFoundError('No watchable item found');
+  const embeds = providers.map((provider: string | null) => {
+    return {
+      embedId: provider || '',
+      url: JSON.stringify(query),
+    };
+  });
 
   return {
-    embeds: result.embeds as SourcererEmbed[],
+    embeds,
   };
 }
 
