@@ -4,7 +4,7 @@ import { baseUrl } from '@/providers/sources/whvx';
 export const novaScraper = makeEmbed({
   id: 'nova',
   name: 'Nova',
-  rank: 270,
+  rank: 670,
   disabled: false,
   async scrape(ctx) {
     const search = await ctx.fetcher(`${baseUrl}/search?query=${encodeURIComponent(ctx.url)}`);
