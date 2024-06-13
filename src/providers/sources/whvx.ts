@@ -9,6 +9,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     title: ctx.media.title,
     releaseYear: ctx.media.releaseYear,
     type: ctx.media.type,
+    imdbId: ctx.media.imdbId,
     season: '',
     episode: '',
   };
