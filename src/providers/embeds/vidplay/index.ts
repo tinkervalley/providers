@@ -1,4 +1,3 @@
-import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 import { Caption, getCaptionTypeFromUrl, labelToLanguageCode } from '@/providers/captions';
 
@@ -47,14 +46,18 @@ export const vidplayScraper = makeEmbed({
         });
       }
     }
-    const playlistUrl = `https://m3u8.justchill.workers.dev/?url=${encodeURIComponent(source)}&referer=https://vidsrc.to/`;
+
     return {
       stream: [
         {
           id: 'primary',
           type: 'hls',
-          playlist: playlistUrl,
-          flags: [flags.CORS_ALLOWED],
+          playlist: source,
+          flags: [],
+          headers: {
+            Referer: url.origin,
+            Origin: url.origin,
+          },
           captions,
           thumbnailTrack,
         },

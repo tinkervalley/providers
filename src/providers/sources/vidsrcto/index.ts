@@ -1,78 +1,88 @@
-import { flags } from '@/entrypoint/utils/targets';
-import { SourcererOutput, makeSourcerer } from '@/providers/base';
-import { Caption, getCaptionTypeFromUrl, labelToLanguageCode } from '@/providers/captions';
+import { load } from 'cheerio';
+
+import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
-import { NotFoundError } from '@/utils/errors';
 
-interface Source {
-  name: string;
-  data: {
-    stream: string;
-    subtitle: Array<{ lang: string; file: string }>;
-  };
-}
+import { decryptSourceUrl } from './common';
+import { SourceResult, SourcesResult } from './types';
 
-interface ApiResponse {
-  sources: Source[];
-  url: string;
-}
+const vidSrcToBase = 'https://vidsrc.to';
+const referer = `${vidSrcToBase}/`;
 
-const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> => {
-  const apiRes: ApiResponse = await ctx.fetcher<ApiResponse>(
-    `https://vidsrcme-seven.vercel.app/vidsrc/${ctx.media.tmdbId}`,
-    {
-      query: {
-        ...(ctx.media.type === 'show' && {
-          s: ctx.media.season.number.toString(),
-          e: ctx.media.episode.number.toString(),
-        }),
-      },
+const universalScraper = async (ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> => {
+  const mediaId = ctx.media.imdbId ?? ctx.media.tmdbId;
+  const url =
+    ctx.media.type === 'movie'
+      ? `/embed/movie/${mediaId}`
+      : `/embed/tv/${mediaId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
+  const mainPage = await ctx.proxiedFetcher<string>(url, {
+    baseUrl: vidSrcToBase,
+    headers: {
+      referer,
     },
-  );
-  ctx.progress(50);
-  const vidplaySource = apiRes.sources.find((source) => source.name === 'Vidplay');
-  if (!vidplaySource || !vidplaySource.data.stream) {
-    throw new NotFoundError('No stream found.');
+  });
+  const mainPage$ = load(mainPage);
+  const dataId = mainPage$('a[data-id]').attr('data-id');
+  if (!dataId) throw new Error('No data-id found');
+  const sources = await ctx.proxiedFetcher<SourcesResult>(`/ajax/embed/episode/${dataId}/sources`, {
+    baseUrl: vidSrcToBase,
+    headers: {
+      referer,
+    },
+  });
+  if (sources.status !== 200) throw new Error('No sources found');
+
+  const embeds: SourcererEmbed[] = [];
+  const embedArr = [];
+  for (const source of sources.result) {
+    const sourceRes = await ctx.proxiedFetcher<SourceResult>(`/ajax/embed/source/${source.id}`, {
+      baseUrl: vidSrcToBase,
+      headers: {
+        referer,
+      },
+    });
+    const decryptedUrl = decryptSourceUrl(sourceRes.result.url);
+    embedArr.push({ source: source.title, url: decryptedUrl });
   }
 
-  const vidplayStreamURL = vidplaySource.data.stream;
-  const proxiedStreamURL = `https://m3u8.justchill.workers.dev/?url=${encodeURIComponent(vidplayStreamURL)}`;
-  const subtitles = vidplaySource.data.subtitle;
-  ctx.progress(75);
-  const captions: Caption[] =
-    subtitles?.map((sub) => {
-      const language = labelToLanguageCode(sub.lang) || 'und'; // Provide a default value if null
-      const captionType = getCaptionTypeFromUrl(sub.file) || 'vtt'; // Set a default value for captionType
+  for (const embedObj of embedArr) {
+    if (embedObj.source === 'Vidplay') {
+      const fullUrl = new URL(embedObj.url);
+      embeds.push({
+        embedId: 'vidplay',
+        url: fullUrl.toString(),
+      });
+    }
 
-      return {
-        id: sub.file,
-        url: sub.file,
-        type: captionType,
-        language,
-        hasCorsRestrictions: false,
-      };
-    }) || [];
-  ctx.progress(100);
+    if (embedObj.source === 'Filemoon') {
+      const fullUrl = new URL(embedObj.url);
+      // Originally Filemoon does not have subtitles. But we can use the ones from Vidplay.
+      const urlWithSubtitles = embedArr.find((v) => v.source === 'Vidplay' && v.url.includes('sub.info'))?.url;
+      const subtitleUrl = urlWithSubtitles ? new URL(urlWithSubtitles).searchParams.get('sub.info') : null;
+      if (subtitleUrl) fullUrl.searchParams.set('sub.info', subtitleUrl);
+      embeds.push(
+        {
+          embedId: 'filemoon',
+          url: fullUrl.toString(),
+        },
+        {
+          embedId: 'filemoon-mp4',
+          url: fullUrl.toString(),
+        },
+      );
+    }
+  }
+
   return {
-    embeds: [],
-    stream: [
-      {
-        id: 'primary',
-        type: 'hls',
-        playlist: proxiedStreamURL,
-        captions,
-        flags: [flags.CORS_ALLOWED],
-      },
-    ],
+    embeds,
   };
 };
 
 export const vidSrcToScraper = makeSourcerer({
-  disabled: true,
   id: 'vidsrcto',
   name: 'VidSrcTo',
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,
-  flags: [flags.CORS_ALLOWED],
-  rank: 110,
+  flags: [],
+  rank: 130,
 });
