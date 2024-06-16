@@ -1,7 +1,9 @@
 import { load } from 'cheerio';
 import crypto from 'crypto-js';
 
+import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
+import { convertPlaylistsToDataUrls } from '@/utils/playlist';
 
 const { AES, MD5 } = crypto;
 
@@ -11,11 +13,13 @@ const { AES, MD5 } = crypto;
 // Thanks Paradox_77
 function mahoaData(input: string, key: string) {
   const a = AES.encrypt(input, key).toString();
-  let b = a.replace('U2FsdGVkX1', '');
-  b = b.replace(/\//g, '|a');
-  b = b.replace(/\+/g, '|b');
-  b = b.replace(/\\=/g, '|c');
-  b = b.replace(/\|/g, '-z');
+
+  const b = a
+    .replace('U2FsdGVkX1', '')
+    .replace(/\//g, '|a')
+    .replace(/\+/g, '|b')
+    .replace(/\\=/g, '|c')
+    .replace(/\|/g, '-z');
   return b;
 }
 
@@ -74,8 +78,11 @@ export const playm4uNMScraper = makeEmbed({
   scrape: async (ctx) => {
     // ex: https://play9str.playm4u.xyz/play/648f159ba3115a6f00744a16
     const mainPage$ = load(await ctx.proxiedFetcher<string>(ctx.url));
+
     const script = mainPage$(`script:contains("${apiUrl}")`).text();
     if (!script) throw new Error('Failed to get script');
+
+    ctx.progress(50);
 
     const domainRef = 'https://ww2.m4ufree.tv';
     const idFile = script.match(/var\s?idfile\s?=\s?"(.*)";/im)?.[1];
@@ -101,14 +108,16 @@ export const playm4uNMScraper = makeEmbed({
 
     if (!apiRes.data || apiRes.type !== 'url-m3u8') throw new Error('Failed to get the stream');
 
+    ctx.progress(100);
+
     return {
       stream: [
         {
           id: 'primary',
           type: 'hls',
-          playlist: apiRes.data,
+          playlist: await convertPlaylistsToDataUrls(ctx.proxiedFetcher, apiRes.data),
           captions: [],
-          flags: [],
+          flags: [flags.CORS_ALLOWED],
         },
       ],
     };

@@ -2,6 +2,7 @@
 // thanks Paradox_77
 import { load } from 'cheerio';
 
+import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, makeSourcerer } from '@/providers/base';
 import { compareMedia } from '@/utils/compare';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
@@ -18,8 +19,15 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   const homePage = await ctx.proxiedFetcher.full(baseUrl);
   baseUrl = new URL(homePage.finalUrl).origin;
 
+  const searchSlug = ctx.media.title
+    .replace(/'/g, '')
+    .replace(/!|@|%|\^|\*|\(|\)|\+|=|<|>|\?|\/|,|\.|:|;|'| |"|&|#|\[|\]|~|$|_/g, '-')
+    .replace(/-+-/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/Ă¢â‚¬â€œ/g, '');
+
   const searchPage$ = load(
-    await ctx.proxiedFetcher<string>(`/search/${ctx.media.title.toLowerCase().replaceAll(/[^a-z0-9A-Z]/g, '-')}.html`, {
+    await ctx.proxiedFetcher<string>(`/search/${searchSlug}.html`, {
       baseUrl,
       query: {
         type: ctx.media.type === 'movie' ? 'movie' : 'tvs',
@@ -35,8 +43,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
         // it just breaks when the titles are too big
         .find('.imagecover a')
         .attr('title')
-        // ex-titles: Home Alone 1990, Avengers Endgame (2019)
-        ?.match(/^(.*?)\s*(?:\(?(\d{4})\)?)?\s*$/) || [];
+        // ex-titles: Home Alone 1990, Avengers Endgame (2019), The Curse (2023-)
+        ?.match(/^(.*?)\s*(?:\(?\s*(\d{4})(?:\s*-\s*\d{0,4})?\s*\)?)?\s*$/) || [];
     const url = searchPage$(element).find('a').attr('href');
 
     if (!title || !url) return;
@@ -47,10 +55,14 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   const watchPageUrl = searchResults.find((x) => x && compareMedia(ctx.media, x.title, x.year))?.url;
   if (!watchPageUrl) throw new NotFoundError('No watchable item found');
 
+  ctx.progress(25);
+
   const watchPage = await ctx.proxiedFetcher.full(watchPageUrl, {
     baseUrl,
     readHeaders: ['Set-Cookie'],
   });
+
+  ctx.progress(50);
 
   let watchPage$ = load(watchPage.body);
 
@@ -85,6 +97,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
       }),
     );
   }
+
+  ctx.progress(75);
 
   const embeds: SourcererEmbed[] = [];
 
@@ -123,6 +137,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     const url = iframePage$('iframe').attr('src');
     if (!url) continue;
 
+    ctx.progress(100);
+
     embeds.push({ embedId, url });
   }
 
@@ -134,9 +150,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
 export const m4uScraper = makeSourcerer({
   id: 'm4ufree',
   name: 'M4UFree',
-  rank: 140,
-  disabled: false,
-  flags: [],
+  rank: 125,
+  flags: [flags.CORS_ALLOWED],
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,
 });
