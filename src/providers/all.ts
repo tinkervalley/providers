@@ -48,7 +48,6 @@ import { nitesScraper } from './sources/nites';
 import { primewireScraper } from './sources/primewire';
 import { soaperTvScraper } from './sources/soapertv';
 import { vidSrcToScraper } from './sources/vidsrcto';
-import { vidsrcWaffleHackerScraper } from './sources/wafflevidsrc';
 import { warezcdnScraper } from './sources/warezcdn';
 import { whvxScraper } from './sources/whvx';
 
@@ -65,7 +64,6 @@ export function gatherAllSources(): Array<Sourcerer> {
     lookmovieScraper,
     nsbxScraper,
     vidSrcToScraper,
-    vidsrcWaffleHackerScraper,
     nepuScraper,
     m4uScraper,
     goojaraScraper,
