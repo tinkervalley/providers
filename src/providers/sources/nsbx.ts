@@ -42,7 +42,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const nsbxScraper = makeSourcerer({
   id: 'nsbx',
   name: 'NSBX',
-  rank: 160,
+  rank: 150,
   flags: [flags.CORS_ALLOWED],
   disabled: false,
   scrapeMovie: comboScraper,
