@@ -24,6 +24,7 @@ export const fileMoonScraper = makeEmbed({
     const unpacked = unpack(evalCode[0]);
     const file = fileRegex.exec(unpacked);
     if (!file?.[1]) throw new Error('Failed to find file');
+    const proxiedStreamURL = `https://m3u8.wafflehacker.io/?url=${encodeURIComponent(file[1])}`;
 
     const url = new URL(ctx.url);
     const subtitlesLink = url.searchParams.get('sub.info');
@@ -50,7 +51,7 @@ export const fileMoonScraper = makeEmbed({
         {
           id: 'primary',
           type: 'hls',
-          playlist: file[1],
+          playlist: proxiedStreamURL,
           flags: [],
           captions,
         },
