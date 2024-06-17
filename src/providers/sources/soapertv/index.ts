@@ -60,7 +60,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   });
 
   const streamResJson: InfoResponse = JSON.parse(streamRes);
-  const ProxiedPlaylistUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}/${streamResJson.val}`)}`;
+  const ProxiedPlaylistUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}${streamResJson.val}`)}`;
   const captions: Caption[] = [];
   for (const sub of streamResJson.subs) {
     // Some subtitles are named <Language>.srt, some are named <LanguageCode>:hi, or just <LanguageCode>
@@ -97,7 +97,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
         ? [
             {
               id: 'backup',
-              playlist: `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}/${streamResJson.val_bak}`)}`,
+              playlist: `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}${streamResJson.val_bak}`)}`,
               type: 'hls' as const,
               flags: [flags.CORS_ALLOWED],
               captions,
@@ -112,7 +112,7 @@ export const soaperTvScraper = makeSourcerer({
   id: 'soapertv',
   name: 'SoaperTV',
   rank: 126,
-  disabled: true,
+  disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,
