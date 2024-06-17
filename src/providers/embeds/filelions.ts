@@ -15,7 +15,7 @@ export const filelionsScraper = makeEmbed({
     });
     const mainPage = mainPageRes.body;
     const streamUrl = mainPage.match(linkRegex) ?? [];
-    const playlist = streamUrl[1];
+    const playlist = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl[1])}`;
     if (!playlist) throw new Error('Stream url not found');
 
     return {
@@ -24,7 +24,7 @@ export const filelionsScraper = makeEmbed({
           id: 'primary',
           type: 'hls',
           playlist,
-          flags: [flags.IP_LOCKED, flags.CORS_ALLOWED],
+          flags: [flags.CORS_ALLOWED],
           captions: [],
         },
       ],
