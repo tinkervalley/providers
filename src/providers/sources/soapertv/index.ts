@@ -4,7 +4,6 @@ import { flags } from '@/entrypoint/utils/targets';
 import { Caption, labelToLanguageCode } from '@/providers/captions';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
-import { convertPlaylistsToDataUrls } from '@/utils/playlist';
 
 import { InfoResponse } from './types';
 import { SourcererOutput, makeSourcerer } from '../../base';
@@ -61,7 +60,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   });
 
   const streamResJson: InfoResponse = JSON.parse(streamRes);
-
+  const ProxiedPlaylistUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}/${streamResJson.val}`)}`;
   const captions: Caption[] = [];
   for (const sub of streamResJson.subs) {
     // Some subtitles are named <Language>.srt, some are named <LanguageCode>:hi, or just <LanguageCode>
@@ -89,7 +88,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
     stream: [
       {
         id: 'primary',
-        playlist: await convertPlaylistsToDataUrls(ctx.proxiedFetcher, `${baseUrl}/${streamResJson.val}`),
+        playlist: ProxiedPlaylistUrl,
         type: 'hls',
         flags: [flags.CORS_ALLOWED],
         captions,
@@ -98,7 +97,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
         ? [
             {
               id: 'backup',
-              playlist: await convertPlaylistsToDataUrls(ctx.proxiedFetcher, `${baseUrl}/${streamResJson.val_bak}`),
+              playlist: `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}/${streamResJson.val_bak}`)}`,
               type: 'hls' as const,
               flags: [flags.CORS_ALLOWED],
               captions,
