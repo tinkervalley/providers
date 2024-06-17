@@ -54,7 +54,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   const streamUrl = playerPage.match(/"file":"(http[^"]+)"/);
 
   if (!streamUrl) throw new NotFoundError('No stream found.');
-  const proxiedStreamURL = `https://m3u8.wafflehacker.io/?url=${encodeURIComponent(streamUrl[1])}`;
+  const proxiedStreamURL = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(streamUrl[1])}`;
   return {
     embeds: [],
     stream: [
