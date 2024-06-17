@@ -55,6 +55,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
 
   // eslint-disable-next-line no-console
   console.log('Set-Cookie Headers:', watchPage.headers.get('Set-Cookie'));
+  // eslint-disable-next-line no-console
+  console.log('Headers', watchPage.headers);
 
   const parsedCookies = parseSetCookie(watchPage.headers.get('Set-Cookie') ?? '');
   // eslint-disable-next-line no-console
