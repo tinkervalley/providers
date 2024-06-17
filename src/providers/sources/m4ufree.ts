@@ -1,5 +1,3 @@
-// kinda based on m4uscraper by Paradox_77
-// thanks Paradox_77
 import { load } from 'cheerio';
 
 import { flags } from '@/entrypoint/utils/targets';
@@ -12,10 +10,6 @@ import { NotFoundError } from '@/utils/errors';
 let baseUrl = 'https://m4ufree.tv';
 
 const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => {
-  // this redirects to ww1.m4ufree.tv or ww2.m4ufree.tv
-  // if i explicitly keep the base ww1 while the load balancers thinks ww2 is optimal
-  // it will keep redirecting all the requests
-  // not only that but the last iframe request will fail
   const homePage = await ctx.proxiedFetcher.full(baseUrl);
   baseUrl = new URL(homePage.finalUrl).origin;
 
@@ -39,11 +33,8 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
   searchPage$('.item').each((_, element) => {
     const [, title, year] =
       searchPage$(element)
-        // the title emement on their page is broken
-        // it just breaks when the titles are too big
         .find('.imagecover a')
         .attr('title')
-        // ex-titles: Home Alone 1990, Avengers Endgame (2019), The Curse (2023-)
         ?.match(/^(.*?)\s*(?:\(?\s*(\d{4})(?:\s*-\s*\d{0,4})?\s*\)?)?\s*$/) || [];
     const url = searchPage$(element).find('a').attr('href');
 
@@ -62,6 +53,18 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     readHeaders: ['Set-Cookie'],
   });
 
+  // eslint-disable-next-line no-console
+  console.log('Set-Cookie Headers:', watchPage.headers.get('Set-Cookie'));
+
+  const parsedCookies = parseSetCookie(watchPage.headers.get('Set-Cookie') ?? '');
+  // eslint-disable-next-line no-console
+  console.log('Parsed Cookies:', parsedCookies);
+
+  const laravelSession = parsedCookies.laravel_session;
+  if (!laravelSession?.value) throw new Error('Failed to find cookie');
+
+  const cookie = makeCookieHeader({ [laravelSession.name]: laravelSession.value });
+
   ctx.progress(50);
 
   let watchPage$ = load(watchPage.body);
@@ -70,11 +73,6 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
     .html()
     ?.match(/_token:\s?'(.*)'/m)?.[1];
   if (!csrfToken) throw new Error('Failed to find csrfToken');
-
-  const laravelSession = parseSetCookie(watchPage.headers.get('Set-Cookie') ?? '').laravel_session;
-  if (!laravelSession?.value) throw new Error('Failed to find cookie');
-
-  const cookie = makeCookieHeader({ [laravelSession.name]: laravelSession.value });
 
   if (ctx.media.type === 'show') {
     const s = ctx.media.season.number < 10 ? `0${ctx.media.season.number}` : ctx.media.season.number.toString();
