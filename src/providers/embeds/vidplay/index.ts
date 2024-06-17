@@ -17,7 +17,6 @@ export const vidplayScraper = makeEmbed({
     });
     if (typeof fileUrlRes.result === 'number') throw new Error('File not found');
     const source = fileUrlRes.result.sources[0].file;
-    const proxiedStreamURL = `https://m3u8.wafflehacker.io/?url=${encodeURIComponent(source)}`;
     const thumbnailSource = fileUrlRes.result.tracks.find((track) => track.kind === 'thumbnails');
 
     let thumbnailTrack: ThumbnailTrack | undefined;
@@ -53,7 +52,7 @@ export const vidplayScraper = makeEmbed({
         {
           id: 'primary',
           type: 'hls',
-          playlist: proxiedStreamURL,
+          playlist: source,
           flags: [],
           headers: {
             Referer: url.origin,

@@ -1,6 +1,5 @@
 import { load } from 'cheerio';
 
-import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 
@@ -84,6 +83,6 @@ export const vidSrcToScraper = makeSourcerer({
   name: 'VidSrcTo',
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,
-  flags: [flags.CORS_ALLOWED],
+  flags: [],
   rank: 135,
 });
