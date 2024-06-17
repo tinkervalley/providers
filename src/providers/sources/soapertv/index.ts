@@ -89,7 +89,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
     stream: [
       {
         id: 'primary',
-        playlist: await convertPlaylistsToDataUrls(ctx.proxiedFetcher, `${baseUrl}/${streamResJson.val}`),
+        playlist: await convertPlaylistsToDataUrls(ctx.fetcher, `${baseUrl}/${streamResJson.val}`),
         type: 'hls',
         flags: [flags.CORS_ALLOWED],
         captions,
@@ -98,7 +98,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
         ? [
             {
               id: 'backup',
-              playlist: await convertPlaylistsToDataUrls(ctx.proxiedFetcher, `${baseUrl}/${streamResJson.val_bak}`),
+              playlist: await convertPlaylistsToDataUrls(ctx.fetcher, `${baseUrl}/${streamResJson.val_bak}`),
               type: 'hls' as const,
               flags: [flags.CORS_ALLOWED],
               captions,
