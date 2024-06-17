@@ -50,22 +50,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
 
   const watchPage = await ctx.proxiedFetcher.full(watchPageUrl, {
     baseUrl,
-    readHeaders: ['Set-Cookie'],
   });
-
-  // eslint-disable-next-line no-console
-  console.log('Set-Cookie Headers:', watchPage.headers.get('Set-Cookie'));
-  // eslint-disable-next-line no-console
-  console.log('Headers', watchPage.headers);
-
-  const parsedCookies = parseSetCookie(watchPage.headers.get('Set-Cookie') ?? '');
-  // eslint-disable-next-line no-console
-  console.log('Parsed Cookies:', parsedCookies);
-
-  const laravelSession = parsedCookies.laravel_session;
-  if (!laravelSession?.value) throw new Error('Failed to find cookie');
-
-  const cookie = makeCookieHeader({ [laravelSession.name]: laravelSession.value });
 
   ctx.progress(50);
 
@@ -91,9 +76,6 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
           idepisode: episodeToken,
           _token: csrfToken,
         }),
-        headers: {
-          cookie,
-        },
       }),
     );
   }
@@ -128,9 +110,6 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext) => 
           m4u: source.data,
           _token: csrfToken,
         }),
-        headers: {
-          cookie,
-        },
       }),
     );
 
