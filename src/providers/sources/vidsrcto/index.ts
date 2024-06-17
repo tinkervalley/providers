@@ -37,7 +37,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
 
   const vidplayStreamURL = vidplaySource.data.stream;
   const proxiedStreamURL = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(vidplayStreamURL)}`;
-  const subtitles = vidplaySource.data.subtitle;
+  const subtitles = Array.isArray(vidplaySource.data.subtitle) ? vidplaySource.data.subtitle : [];
 
   const captions: Caption[] =
     subtitles?.map((sub) => {
