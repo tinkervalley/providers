@@ -19,7 +19,7 @@ interface ApiResponse {
 
 const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> => {
   const apiRes: ApiResponse = await ctx.fetcher<ApiResponse>(
-    `https://vidsrcme-seven.vercel.app/vidsrc/${ctx.media.tmdbId}`,
+    `https://vidsrcto.wafflehacker.io/vidsrc/${ctx.media.tmdbId}`,
     {
       query: {
         ...(ctx.media.type === 'show' && {
@@ -30,7 +30,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
     },
   );
 
-  const vidplaySource = apiRes.sources.find((source) => source.name === 'Vidplay');
+  const vidplaySource = apiRes.sources.find((source) => source.name === 'F2Cloud');
   if (!vidplaySource || !vidplaySource.data.stream) {
     throw new NotFoundError('No stream found.');
   }
