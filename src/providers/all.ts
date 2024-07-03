@@ -31,6 +31,8 @@ import { hydraxScraper } from './embeds/hydrax';
 import { novaScraper } from './embeds/nova';
 import { alphaScraper, deltaScraper } from './embeds/nsbx';
 import { playm4uNMScraper } from './embeds/playm4u/nm';
+import { smashyStreamOScraper } from './embeds/smashystream/opstream';
+import { smashyStreamFScraper } from './embeds/smashystream/video1';
 import { streamTapeScraper } from './embeds/streamtape';
 import { streamvidScraper } from './embeds/streamvid';
 import { vidCloudScraper } from './embeds/vidcloud';
@@ -46,6 +48,7 @@ import { m4uScraper } from './sources/m4ufree';
 import { nepuScraper } from './sources/nepu';
 import { nitesScraper } from './sources/nites';
 import { primewireScraper } from './sources/primewire';
+import { smashyStreamScraper } from './sources/smashystream';
 import { soaperTvScraper } from './sources/soapertv';
 import { vidSrcToScraper } from './sources/vidsrcto';
 import { warezcdnScraper } from './sources/warezcdn';
@@ -75,6 +78,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     soaperTvScraper,
     tugaflixScraper,
     whvxScraper,
+    smashyStreamScraper,
   ];
 }
 
@@ -111,5 +115,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     hydraxScraper,
     vidMolyScraper,
     novaScraper,
+    smashyStreamFScraper,
+    smashyStreamOScraper,
   ];
 }
