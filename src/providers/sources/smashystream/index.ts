@@ -17,11 +17,11 @@ const universalScraper = async (ctx: ShowScrapeContext | MovieScrapeContext): Pr
     embeds: [
       {
         embedId: smashyStreamFScraper.id,
-        url: `https://embed.smashystream.com/video1dn.php${query}`,
+        url: `https://embed.smashystream.com/videofeee.php${query}`,
       },
       {
         embedId: smashyStreamOScraper.id,
-        url: `https://embed.smashystream.com/videoop.php${query}`,
+        url: `https://embed.smashystream.com/videopihimo.php${query}`,
       },
     ],
   };
@@ -30,7 +30,6 @@ const universalScraper = async (ctx: ShowScrapeContext | MovieScrapeContext): Pr
 export const smashyStreamScraper = makeSourcerer({
   id: 'smashystream',
   name: 'SmashyStream',
-  disabled: true,
   rank: 30,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: universalScraper,
