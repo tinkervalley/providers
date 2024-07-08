@@ -5,11 +5,11 @@ import { NotFoundError } from '@/utils/errors';
 const providers = [
   {
     id: 'nova',
-    rank: 700,
+    rank: 710,
   },
   {
     id: 'astra',
-    rank: 710,
+    rank: 700,
   },
 ];
 
