@@ -19,7 +19,7 @@ interface ApiResponse {
 
 const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> => {
   const apiRes: ApiResponse = await ctx.fetcher<ApiResponse>(
-    `https://vidsrcto.wafflehacker.io/vidsrc/${ctx.media.tmdbId}`,
+    `https://vidsrcto-two.vercel.app/vidsrc/${ctx.media.tmdbId}`,
     {
       query: {
         ...(ctx.media.type === 'show' && {
