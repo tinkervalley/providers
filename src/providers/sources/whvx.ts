@@ -1,6 +1,7 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
+import { NotFoundError } from '@/utils/errors';
 
 export const baseUrl = 'https://api.whvx.net';
 
@@ -8,8 +9,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   const query = {
     title: ctx.media.title,
     releaseYear: ctx.media.releaseYear,
-    type: ctx.media.type,
+    tmdbId: ctx.media.tmdbId,
     imdbId: ctx.media.imdbId,
+    type: ctx.media.type,
     season: '',
     episode: '',
   };
@@ -19,11 +21,15 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     query.episode = ctx.media.episode.number.toString();
   }
 
-  const providers = ['nova', null];
+  const res = await ctx.fetcher(`${baseUrl}/status`);
 
-  const embeds = providers.map((provider: string | null) => {
+  if (res.providers?.length === 0) {
+    throw new NotFoundError('No providers available');
+  }
+
+  const embeds = res.providers.map((provider: string) => {
     return {
-      embedId: provider || '',
+      embedId: provider,
       url: JSON.stringify(query),
     };
   });

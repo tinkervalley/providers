@@ -28,7 +28,6 @@ import { closeLoadScraper } from './embeds/closeload';
 import { fileMoonScraper } from './embeds/filemoon';
 import { fileMoonMp4Scraper } from './embeds/filemoon/mp4';
 import { hydraxScraper } from './embeds/hydrax';
-import { novaScraper } from './embeds/nova';
 import { alphaScraper, deltaScraper } from './embeds/nsbx';
 import { playm4uNMScraper } from './embeds/playm4u/nm';
 import { smashyStreamOScraper } from './embeds/smashystream/opstream';
@@ -41,6 +40,7 @@ import { vidplayScraper } from './embeds/vidplay';
 import { voeScraper } from './embeds/voe';
 import { warezcdnembedHlsScraper } from './embeds/warezcdn/hls';
 import { warezcdnembedMp4Scraper } from './embeds/warezcdn/mp4';
+import { astraScraper, novaScraper } from './embeds/whvx';
 import { wootlyScraper } from './embeds/wootly';
 import { goojaraScraper } from './sources/goojara';
 import { hdRezkaScraper } from './sources/hdrezka';
@@ -115,6 +115,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     hydraxScraper,
     vidMolyScraper,
     novaScraper,
+    astraScraper,
     smashyStreamFScraper,
     smashyStreamOScraper,
   ];
