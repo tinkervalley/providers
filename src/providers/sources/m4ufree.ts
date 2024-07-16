@@ -151,8 +151,7 @@ export const m4uScraper = makeSourcerer({
   id: 'm4ufree',
   name: 'M4UFree',
   rank: 125,
-  disabled: true,
-  flags: [flags.CORS_ALLOWED],
+  flags: [],
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,
 });
