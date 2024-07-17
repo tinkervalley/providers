@@ -11,6 +11,8 @@ export const hydraxScraper = makeEmbed({
     const match = embed.match(/PLAYER\(atob\("(.*?)"/);
     if (!match?.[1]) throw new Error('No Data Found');
 
+    ctx.progress(50);
+
     const qualityMatch = embed.match(/({"pieceLength.+?})/);
     let qualityData: { pieceLength?: string; sd?: string[]; mHd?: string[]; hd?: string[]; fullHd?: string[] } = {};
     if (qualityMatch?.[1]) qualityData = JSON.parse(qualityMatch[1]);
@@ -19,6 +21,8 @@ export const hydraxScraper = makeEmbed({
     if (!data.id || !data.domain) throw new Error('Required values missing');
 
     const domain = new URL((await ctx.proxiedFetcher.full(`https://${data.domain}`)).finalUrl).hostname;
+
+    ctx.progress(100);
 
     return {
       stream: [
