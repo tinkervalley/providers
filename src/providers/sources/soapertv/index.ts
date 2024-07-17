@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 
 import { flags } from '@/entrypoint/utils/targets';
-import { Caption, labelToLanguageCode } from '@/providers/captions';
+import { Caption, labelToLanguageCode, removeDuplicatedLanguages } from '@/providers/captions';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
@@ -63,7 +63,9 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   const ProxiedPlaylistUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}${streamResJson.val}`)}`;
   const captions: Caption[] = [];
   for (const sub of streamResJson.subs) {
-    // Some subtitles are named <Language>.srt, some are named <LanguageCode>:hi, or just <LanguageCode>
+    const proxyPrefix = `https://proxy.wafflehacker.io?destination=`;
+    const fullSubUrl = `${proxyPrefix}${encodeURIComponent(baseUrl + sub.path)}`;
+
     let language: string | null = '';
     if (sub.name.includes('.srt')) {
       language = labelToLanguageCode(sub.name.split('.srt')[0]);
@@ -75,14 +77,14 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
     if (!language) continue;
 
     captions.push({
-      id: sub.path,
-      url: sub.path,
+      id: fullSubUrl,
+      url: fullSubUrl,
       type: 'srt',
       hasCorsRestrictions: false,
       language,
     });
   }
-
+  const noDupes = removeDuplicatedLanguages(captions);
   return {
     embeds: [],
     stream: [
@@ -91,7 +93,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
         playlist: ProxiedPlaylistUrl,
         type: 'hls',
         flags: [flags.CORS_ALLOWED],
-        captions,
+        captions: noDupes,
       },
       ...(streamResJson.val_bak
         ? [
@@ -100,7 +102,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
               playlist: `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}${streamResJson.val_bak}`)}`,
               type: 'hls' as const,
               flags: [flags.CORS_ALLOWED],
-              captions,
+              captions: noDupes,
             },
           ]
         : []),
