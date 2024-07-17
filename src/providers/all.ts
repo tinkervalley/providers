@@ -34,6 +34,7 @@ import { smashyStreamOScraper } from './embeds/smashystream/opstream';
 import { smashyStreamFScraper } from './embeds/smashystream/video1';
 import { streamTapeScraper } from './embeds/streamtape';
 import { streamvidScraper } from './embeds/streamvid';
+import { turbovidScraper } from './embeds/turbovid';
 import { vidCloudScraper } from './embeds/vidcloud';
 import { vidMolyScraper } from './embeds/vidmoly';
 import { vidplayScraper } from './embeds/vidplay';
@@ -42,6 +43,7 @@ import { warezcdnembedHlsScraper } from './embeds/warezcdn/hls';
 import { warezcdnembedMp4Scraper } from './embeds/warezcdn/mp4';
 import { astraScraper, novaScraper } from './embeds/whvx';
 import { wootlyScraper } from './embeds/wootly';
+import { catflixScraper } from './sources/catflix';
 import { ee3Scraper } from './sources/ee3';
 import { goojaraScraper } from './sources/goojara';
 import { hdRezkaScraper } from './sources/hdrezka';
@@ -81,6 +83,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     whvxScraper,
     smashyStreamScraper,
     ee3Scraper,
+    catflixScraper,
   ];
 }
 
@@ -120,5 +123,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     astraScraper,
     smashyStreamFScraper,
     smashyStreamOScraper,
+    turbovidScraper,
   ];
 }
