@@ -5,6 +5,7 @@ import { playm4uNMScraper } from '@/providers/embeds/playm4u/nm';
 import { streamTapeScraper } from '@/providers/embeds/streamtape';
 import { upstreamScraper } from '@/providers/embeds/upstream';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
+import { soaperTvScraper } from '@/providers/sources/soapertv';
 import { vidSrcToScraper } from '@/providers/sources/vidsrcto';
 import { Stream } from '@/providers/streams';
 import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
@@ -20,6 +21,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   streamTapeScraper.id,
   novaScraper.id,
   playm4uNMScraper.id,
+  soaperTvScraper.id,
 ];
 
 export function isValidStream(stream: Stream | undefined): boolean {
