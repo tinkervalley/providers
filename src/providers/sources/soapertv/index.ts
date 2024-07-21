@@ -62,27 +62,30 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   const streamResJson: InfoResponse = JSON.parse(streamRes);
   const ProxiedPlaylistUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodeURIComponent(`${baseUrl}${streamResJson.val}`)}`;
   const captions: Caption[] = [];
-  for (const sub of streamResJson.subs) {
-    const proxyPrefix = `https://proxy.wafflehacker.io?destination=`;
-    const fullSubUrl = `${proxyPrefix}${encodeURIComponent(baseUrl + sub.path)}`;
+  if (Array.isArray(streamResJson.subs)) {
+    // Check if streamResJson.subs is an array
+    for (const sub of streamResJson.subs) {
+      const proxyPrefix = `https://proxy.wafflehacker.io?destination=`;
+      const fullSubUrl = `${proxyPrefix}${encodeURIComponent(baseUrl + sub.path)}`;
 
-    let language: string | null = '';
-    if (sub.name.includes('.srt')) {
-      language = labelToLanguageCode(sub.name.split('.srt')[0]);
-    } else if (sub.name.includes(':')) {
-      language = sub.name.split(':')[0];
-    } else {
-      language = sub.name;
+      let language: string | null = '';
+      if (sub.name.includes('.srt')) {
+        language = labelToLanguageCode(sub.name.split('.srt')[0]);
+      } else if (sub.name.includes(':')) {
+        language = sub.name.split(':')[0];
+      } else {
+        language = sub.name;
+      }
+      if (!language) continue;
+
+      captions.push({
+        id: fullSubUrl,
+        url: fullSubUrl,
+        type: 'srt',
+        hasCorsRestrictions: false,
+        language,
+      });
     }
-    if (!language) continue;
-
-    captions.push({
-      id: fullSubUrl,
-      url: fullSubUrl,
-      type: 'srt',
-      hasCorsRestrictions: false,
-      language,
-    });
   }
   const noDupes = removeDuplicatedLanguages(captions);
   return {
