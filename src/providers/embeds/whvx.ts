@@ -35,8 +35,6 @@ function embed(provider: { id: string; rank: number }) {
 
         if (search.statusCode === 429) {
           throw new Error('Rate limited');
-        } else if (search.statusCode === 404) {
-          throw new NotFoundError('No results found');
         } else if (search.statusCode !== 200) {
           throw new NotFoundError('Failed to search');
         }
@@ -44,14 +42,6 @@ function embed(provider: { id: string; rank: number }) {
         const result = await ctx.fetcher(
           `${baseUrl}/source?resourceId=${encodeURIComponent(search.body.url)}&provider=${provider.id}`,
         );
-
-        if (result.statusCode === 429) {
-          throw new Error('Rate limited');
-        } else if (result.statusCode === 404) {
-          throw new NotFoundError('No results found');
-        } else if (result.statusCode !== 200) {
-          throw new NotFoundError('Failed to search');
-        }
 
         clearInterval(interval);
         ctx.progress(100);
