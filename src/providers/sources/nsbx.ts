@@ -5,6 +5,11 @@ import { NotFoundError } from '@/utils/errors';
 
 export const baseUrl = 'https://nsbx.wafflehacker.io';
 
+export const headers = {
+  Origin: 'https://www.vidbinge.com',
+  Referer: 'https://www.vidbinge.com',
+};
+
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const query = {
     title: ctx.media.title,
@@ -21,7 +26,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     query.episode = ctx.media.episode.number.toString();
   }
 
-  const res = await ctx.fetcher(`${baseUrl}/status`);
+  const res = await ctx.fetcher(`${baseUrl}/status`, { headers });
 
   if (res.providers?.length === 0) {
     throw new NotFoundError('No providers available');

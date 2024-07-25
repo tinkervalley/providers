@@ -13,6 +13,11 @@ const providers = [
   },
 ];
 
+export const headers = {
+  Origin: 'https://www.vidbinge.com',
+  Referer: 'https://www.vidbinge.com',
+};
+
 function embed(provider: { id: string; rank: number }) {
   return makeEmbed({
     id: provider.id,
@@ -31,6 +36,7 @@ function embed(provider: { id: string; rank: number }) {
       try {
         const search = await ctx.fetcher.full(
           `${baseUrl}/search?query=${encodeURIComponent(ctx.url)}&provider=${provider.id}`,
+          { headers },
         );
 
         if (search.statusCode === 429) {
@@ -41,6 +47,7 @@ function embed(provider: { id: string; rank: number }) {
 
         const result = await ctx.fetcher(
           `${baseUrl}/source?resourceId=${encodeURIComponent(search.body.url)}&provider=${provider.id}`,
+          { headers },
         );
 
         clearInterval(interval);
